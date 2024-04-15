@@ -1,0 +1,16 @@
+[build-system]
+requires = ["poetry-core>=1.1.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pydddcore"
+version = "1.0.0"
+description = "Python based Domain Driven Design (DDD) building blocks.."
+authors = ["Kapil Dhaimade <kapil.dhaimade@live.com>"]
+homepage = "https://github.com/kapil-dhaimade/pydddcore"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.4"

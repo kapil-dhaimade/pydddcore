@@ -1,5 +1,5 @@
 import pytest
-from pydddcore import Entity, ValueObject
+import pydddcore
 
 # Test Entity class
 class TestEntity:
