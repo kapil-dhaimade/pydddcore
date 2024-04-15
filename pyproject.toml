@@ -18,6 +18,9 @@ python = "^3.9"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
 
+# This section needed for GitHub actions to run pytest, else 
+# it does not find our module from tests folder.
+# Src: https://stackoverflow.com/questions/54895002/modulenotfounderror-with-pytest
 [tool.pytest.ini_options]
 pythonpath = "src"
 addopts = [
