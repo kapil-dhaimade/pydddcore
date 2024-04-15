@@ -1,6 +1,6 @@
 import pytest
 
-from pydddcore.core import (
+from pydddcore import (
     Entity,
     ValueObject,
     EntityId,
