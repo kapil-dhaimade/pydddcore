@@ -1,2 +1,2 @@
 # py-ddd-core
-Python based Domain Driven Design building clocks.
+Python based Domain Driven Design building blocks.
