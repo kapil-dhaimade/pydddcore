@@ -8,6 +8,9 @@ version = "1.0.0"
 description = "Python based Domain Driven Design (DDD) building blocks.."
 authors = ["Kapil Dhaimade <kapil.dhaimade@live.com>"]
 homepage = "https://github.com/kapil-dhaimade/pydddcore"
+packages = [
+    { package = "pydddcore", from = "src" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
