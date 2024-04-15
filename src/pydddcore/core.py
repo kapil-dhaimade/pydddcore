@@ -1,6 +1,7 @@
 import uuid
+from abc import ABC, abstractmethod
 
-class ValueObject:
+class ValueObject(ABC):
     def __eq__(self, other) -> bool:
         if isinstance(other, self.__class__):
             return self.__dict__ == other.__dict__
@@ -10,20 +11,18 @@ class ValueObject:
         return not self == other
     
 class EntityId(ValueObject):
-    def __init__(self):
-        self._id: str = uuid.uuid4().hex
-
     def __init__(self, id: str):
         self._id: str = id
+
+    @staticmethod
+    def create_new() -> 'EntityId':
+        return EntityId(uuid.uuid4().hex)
 
     def __str__(self) -> str:
         return self._id
     
-class Entity:
-    def __init__(self):
-        self._id: EntityId = EntityId()
-
-    def __init__(self, id: EntityId):
+class Entity(ABC):
+    def __init__(self, id: EntityId = EntityId.create_new()):
         self._id: EntityId = id
 
     def __eq__(self, other):
@@ -46,22 +45,24 @@ class DomainException(Exception):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
-class DomainEvent:
+class DomainEvent(ABC):
     _evt_name: str = ""
 
     def name(self) -> str:
         return self.__class__._evt_name
 
-class DomainEventPublisher:
+class DomainEventPublisher(ABC):
+    @abstractmethod
     def publish(self, event: DomainEvent):
         pass
 
-class DomainEventSubscriber:
+class DomainEventSubscriber(ABC):
+    @abstractmethod
     def handleEvent(self, event: DomainEvent):
         pass
 
-class DomainService:
+class DomainService(ABC):
     pass
 
-class Repository:
+class Repository(ABC):
     pass
