@@ -8,15 +8,13 @@ version = "1.0.0"
 description = "Python based Domain Driven Design (DDD) building blocks.."
 authors = ["Kapil Dhaimade <kapil.dhaimade@live.com>"]
 homepage = "https://github.com/kapil-dhaimade/pydddcore"
-packages = [
-    { include = "pydddcore", from = "src" }
-]
 
 [tool.poetry.dependencies]
 python = "^3.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
+pytest-mock = "^3.3.0"
 
 # This section needed for GitHub actions to run pytest, else 
 # it does not find our module from tests folder.

@@ -1,4 +1,5 @@
 import pytest
+import uuid
 
 from pydddcore import (
     Entity,
@@ -36,7 +37,14 @@ def test_entity_id_str():
     assert str(EntityId.create_new()) != ""
 
 
-def test_entity_equality_dependent_only_on_id():
+def test_entity_id_uses_uuid(mocker):
+    mocker.patch("uuid.uuid4", 
+                 return_value=uuid.UUID("12345678123456781234567812345678"))
+    id1 = EntityId.create_new()
+    assert str(id1) == "12345678123456781234567812345678"
+
+
+def test_entity_equality():
     entity1 = DummyEntity(EntityId("1"))
     entity1.intVal = 5
     assert entity1 == entity1  # Same instance should be equal
@@ -55,6 +63,11 @@ def test_entity_equality_dependent_only_on_id():
     entity4.intVal = 5
     assert entity3 == entity4  # Different instance with same id 
                                #should be equal
+
+
+def test_entity_id_prop():
+    entity = Entity(EntityId("1"))
+    assert entity.id == EntityId("1")
 
 
 def test_value_object_equality():
