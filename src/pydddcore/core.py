@@ -13,20 +13,16 @@ class ValueObject(ABC):
 
 
 class EntityId(ValueObject):
-    def __init__(self, id: str):
-        self._id: str = id
-
-    @staticmethod
-    def create_new() -> 'EntityId':
-        return EntityId(uuid.uuid4().hex)
+    def __init__(self, id: str = None):
+        self._id: str = id if id is not None else uuid.uuid4().hex
 
     def __str__(self) -> str:
         return self._id
 
 
 class Entity(ABC):
-    def __init__(self, id: EntityId = EntityId.create_new()):
-        self._id: EntityId = id
+    def __init__(self, id: EntityId = None):
+        self._id = id if id is not None else EntityId()
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -42,8 +38,8 @@ class Entity(ABC):
 
 
 class AggregateRoot(Entity):
-    def __init__(self, id: EntityId):
-        super().__init__(id)
+    def __init__(self, id: EntityId = None):
+        super().__init__()
 
 
 class DomainException(Exception):
@@ -76,3 +72,13 @@ class DomainService(ABC):
 
 class Repository(ABC):
     pass
+
+
+class ApplicationService(ABC):
+    pass
+
+
+class Specification(ABC):
+    @abstractmethod
+    def is_satisfied_by(self, obj: object) -> bool:
+        pass

@@ -28,19 +28,19 @@ class DummyValueObject(ValueObject):
 def test_entity_id_equality():
     assert EntityId("1") == EntityId("1")
     assert EntityId("2") != EntityId("3")
-    assert EntityId("1") != EntityId.create_new()
-    assert EntityId.create_new() != EntityId.create_new()
+    assert EntityId("1") != EntityId()
+    assert EntityId() != EntityId()
 
 
 def test_entity_id_str():
     assert str(EntityId("12345-ABCDE")) == "12345-ABCDE"
-    assert str(EntityId.create_new()) != ""
+    assert str(EntityId()) != ""
 
 
 def test_entity_id_uses_uuid(mocker):
     mocker.patch("uuid.uuid4", 
                  return_value=uuid.UUID("12345678123456781234567812345678"))
-    id1 = EntityId.create_new()
+    id1 = EntityId()
     assert str(id1) == "12345678123456781234567812345678"
 
 
@@ -65,6 +65,14 @@ def test_entity_equality():
                                #should be equal
 
 
+def test_multiple_new_entities_have_unique_ids():
+    entity1 = Entity()
+    entity2 = Entity()
+    entity3 = Entity()
+    entity4 = Entity()
+    assert entity1.id != entity2.id != entity3.id != entity4.id
+
+
 def test_entity_id_prop():
     entity = Entity(EntityId("1"))
     assert entity.id == EntityId("1")
@@ -87,9 +95,9 @@ def test_value_object_equality():
 
 
 def test_ddd_abstract_classes():
-    with pytest.raises(TypeError) as e:
+    with pytest.raises(TypeError):
         DomainEventPublisher()
-    with pytest.raises(TypeError) as e:
+    with pytest.raises(TypeError):
         DomainEventSubscriber()
 
 
@@ -101,7 +109,7 @@ def test_domain_event_name():
 
 
 def test_aggregate_root_is_an_entity():
-    entity = AggregateRoot(EntityId.create_new())
+    entity = AggregateRoot()
     assert isinstance(entity, Entity)
 
 
