@@ -9,14 +9,14 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pydddcore"
-version = "1.1.1"
+version = "1.1.2"
 description = "Python based Domain Driven Design (DDD) building blocks.."
 authors = ["Kapil Dhaimade <kapil.dhaimade@live.com>"]
 homepage = "https://github.com/kapil-dhaimade/pydddcore"
 # https://stackoverflow.com/questions/69230525/why-does-poetry-build-raise-moduleorpackagenotfound-exception
 # needed when src hierarchy is nested for build sys to find modules.
 packages = [
-    { include = "src" }
+    { include = "pydddcore", from = "src" }
 ]
 
 [tool.poetry.dependencies]
