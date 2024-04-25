@@ -51,9 +51,10 @@ class DomainException(Exception):
 class DomainEvent(ABC):
     _evt_name: str = ""
 
-    def __init__(self) -> None:
+    def __init__(self, timestamp_utc: datetime = None) -> None:
         super().__init__()
-        self._timestamp_utc: datetime = datetime.now(timezone.utc)
+        self._timestamp_utc: datetime = timestamp_utc if \
+            timestamp_utc is not None else datetime.now(timezone.utc)
 
     @property
     def name(self) -> str:

@@ -106,6 +106,9 @@ def test_ddd_abstract_classes():
 class DummyDomainEvent(DomainEvent):
     _evt_name = "DummyEvent"
 
+    def __init__(self, timestamp_utc: datetime = None):
+        super().__init__(timestamp_utc)
+
 
 def test_domain_event_name():
     event = DummyDomainEvent()
@@ -121,7 +124,7 @@ def test_domain_event_timestamp(mocker):
     event = DummyDomainEvent()
     assert event.timestamp_utc == \
         datetime.fromisoformat("2021-01-01T00:00:00+00:00")
-    
+
     if sys.version_info >= (3, 11):
         # Python 3.10 and below does not support 'Z' suffix in ISO 8601.
         mocked_datetime.now.return_value = \
@@ -129,6 +132,11 @@ def test_domain_event_timestamp(mocker):
         event2 = DummyDomainEvent()
         assert event2.timestamp_utc == \
             datetime.fromisoformat("2021-01-01T00:00:00Z")
+
+    event3 = DummyDomainEvent(datetime.
+                              fromisoformat("2023-02-03T00:00:00+00:00"))
+    assert event3.timestamp_utc == datetime.\
+        fromisoformat("2023-02-03T00:00:00+00:00")
 
 
 def test_aggregate_root_is_an_entity():
