@@ -1,5 +1,6 @@
 import pytest
 import uuid
+from datetime import datetime
 
 from pydddcore import (
     Entity,
@@ -101,11 +102,23 @@ def test_ddd_abstract_classes():
         DomainEventSubscriber()
 
 
+class DummyDomainEvent(DomainEvent):
+    _evt_name = "DummyEvent"
+
+
 def test_domain_event_name():
-    class DummyDomainEvent(DomainEvent):
-        _evt_name = "DummyEvent"
     event = DummyDomainEvent()
-    assert event.name() == "DummyEvent"
+    assert event.name == "DummyEvent"
+
+
+def test_domain_event_timestamp(mocker):
+    # Need to patch datetime in core module for mocking to work.
+    mocked_datetime = mocker.patch('pydddcore.core.datetime')
+    mocked_datetime.now.return_value = \
+        datetime.fromisoformat("2021-01-01T00:00:00Z")
+    event = DummyDomainEvent()
+    assert event.timestamp_utc == \
+        datetime.fromisoformat("2021-01-01T00:00:00Z")
 
 
 def test_aggregate_root_is_an_entity():

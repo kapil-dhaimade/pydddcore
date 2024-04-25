@@ -1,5 +1,6 @@
 import uuid
 from abc import ABC, abstractmethod
+from datetime import datetime, timezone
 
 
 class ValueObject(ABC):
@@ -50,8 +51,17 @@ class DomainException(Exception):
 class DomainEvent(ABC):
     _evt_name: str = ""
 
+    def __init__(self) -> None:
+        super().__init__()
+        self._timestamp_utc: datetime = datetime.now(timezone.utc)
+
+    @property
     def name(self) -> str:
         return self.__class__._evt_name
+
+    @property
+    def timestamp_utc(self) -> datetime:
+        return self._timestamp_utc
 
 
 class DomainEventPublisher(ABC):
