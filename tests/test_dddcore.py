@@ -122,8 +122,8 @@ def test_domain_event_timestamp(mocker):
     assert event.timestamp_utc == \
         datetime.fromisoformat("2021-01-01T00:00:00+00:00")
     
-    if sys.version_info >= (3, 10):
-        # Python 3.9, etc. does not support 'Z' suffix in ISO 8601.
+    if sys.version_info >= (3, 11):
+        # Python 3.10 and below does not support 'Z' suffix in ISO 8601.
         mocked_datetime.now.return_value = \
             datetime.fromisoformat("2021-01-01T00:00:00Z")
         event2 = DummyDomainEvent()
