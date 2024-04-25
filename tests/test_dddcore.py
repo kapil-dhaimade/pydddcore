@@ -1,6 +1,7 @@
 import pytest
 import uuid
 from datetime import datetime
+import sys
 
 from pydddcore import (
     Entity,
@@ -114,11 +115,20 @@ def test_domain_event_name():
 def test_domain_event_timestamp(mocker):
     # Need to patch datetime in core module for mocking to work.
     mocked_datetime = mocker.patch('pydddcore.core.datetime')
+
     mocked_datetime.now.return_value = \
-        datetime.fromisoformat("2021-01-01T00:00:00Z")
+        datetime.fromisoformat("2021-01-01T00:00:00+00:00")
     event = DummyDomainEvent()
     assert event.timestamp_utc == \
-        datetime.fromisoformat("2021-01-01T00:00:00Z")
+        datetime.fromisoformat("2021-01-01T00:00:00+00:00")
+    
+    if sys.version_info >= (3, 10):
+        # Python 3.9, etc. does not support 'Z' suffix in ISO 8601.
+        mocked_datetime.now.return_value = \
+            datetime.fromisoformat("2021-01-01T00:00:00Z")
+        event2 = DummyDomainEvent()
+        assert event2.timestamp_utc == \
+            datetime.fromisoformat("2021-01-01T00:00:00Z")
 
 
 def test_aggregate_root_is_an_entity():
