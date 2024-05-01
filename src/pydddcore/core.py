@@ -40,7 +40,7 @@ class Entity(ABC):
 
 class AggregateRoot(Entity):
     def __init__(self, id: EntityId = None):
-        super().__init__()
+        super().__init__(id)
 
 
 class DomainException(Exception):

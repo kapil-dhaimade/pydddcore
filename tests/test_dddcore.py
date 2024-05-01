@@ -144,6 +144,11 @@ def test_aggregate_root_is_an_entity():
     assert isinstance(entity, Entity)
 
 
+def test_aggregate_root_id():
+    agg_root = AggregateRoot(EntityId("42"))
+    assert agg_root.id == EntityId("42")
+
+
 def test_domain_exception():
     with pytest.raises(DomainException) as e:
         raise DomainException("Test exception")
