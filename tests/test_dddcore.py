@@ -40,7 +40,7 @@ def test_entity_id_str():
 
 
 def test_entity_id_uses_uuid(mocker):
-    mocker.patch("uuid.uuid4", 
+    mocker.patch("uuid.uuid4",
                  return_value=uuid.UUID("12345678123456781234567812345678"))
     id1 = EntityId()
     assert str(id1) == "12345678123456781234567812345678"
@@ -54,17 +54,20 @@ def test_entity_equality():
 
     entity2 = DummyEntity(EntityId("1"))
     entity2.intVal = 6
-    assert entity1 == entity2  # Different instance with same id should be equal
+    # Different instance with same id should be equal
+    assert entity1 == entity2
 
     entity3 = DummyEntity(EntityId("2"))
     entity3.intVal = 5
-    assert entity1 != entity3  # Different instance with different id
-                               # but same attributes should not be equal
+    # Different instance with different id
+    # but same attributes should not be equal
+    assert entity1 != entity3
 
     entity4 = DummyEntity(EntityId("2"))
     entity4.intVal = 5
-    assert entity3 == entity4  # Different instance with same id 
-                               #should be equal
+    # Different instance with same id
+    # should be equal
+    assert entity3 == entity4
 
 
 def test_multiple_new_entities_have_unique_ids():
@@ -86,14 +89,17 @@ def test_value_object_equality():
     assert value1 == value1  # Same instance should be equal
     assert not value1 != value1
 
-    assert value1 == value2  # Different instances with same values should be equal
+    # Different instances with same values should be equal
+    assert value1 == value2
     assert not value1 != value2
 
     value3 = DummyValueObject(5, "World")
-    assert value1 != value3  # Different instances with different values should not be equal
+    # Different instances with different values should not be equal
+    assert value1 != value3
 
     value4 = DummyValueObject(6, "Hello")
-    assert value1 != value4  # Different instances with different values should not be equal
+    # Different instances with different values should not be equal
+    assert value1 != value4
 
 
 def test_ddd_abstract_classes():
@@ -104,7 +110,7 @@ def test_ddd_abstract_classes():
 
 
 class DummyDomainEvent(DomainEvent):
-    _evt_name = "DummyEvent"
+    evt_name = "DummyEvent"
 
     def __init__(self, timestamp_utc: datetime = None):
         super().__init__(timestamp_utc)

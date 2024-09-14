@@ -49,7 +49,7 @@ class DomainException(Exception):
 
 
 class DomainEvent(ABC):
-    _evt_name: str = ""
+    evt_name: str = ""
 
     def __init__(self, timestamp_utc: datetime = None) -> None:
         super().__init__()
@@ -58,7 +58,7 @@ class DomainEvent(ABC):
 
     @property
     def name(self) -> str:
-        return self.__class__._evt_name
+        return self.__class__.evt_name
 
     @property
     def timestamp_utc(self) -> datetime:
@@ -73,7 +73,7 @@ class DomainEventPublisher(ABC):
 
 class DomainEventSubscriber(ABC):
     @abstractmethod
-    def handleEvent(self, event: DomainEvent):
+    async def handleEvent(self, event: DomainEvent):
         pass
 
 
