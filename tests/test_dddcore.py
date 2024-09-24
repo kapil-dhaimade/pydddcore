@@ -34,6 +34,13 @@ def test_entity_id_equality():
     assert EntityId() != EntityId()
 
 
+def test_entity_id_hash():
+    assert hash(EntityId("1")) == hash(EntityId("1"))
+    assert hash(EntityId("2")) != hash(EntityId("3"))
+    assert hash(EntityId("1")) != hash(EntityId())
+    assert hash(EntityId()) != hash(EntityId())
+
+
 def test_entity_id_str():
     assert str(EntityId("12345-ABCDE")) == "12345-ABCDE"
     assert str(EntityId()) != ""
