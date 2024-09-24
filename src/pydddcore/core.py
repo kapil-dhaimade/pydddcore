@@ -20,6 +20,9 @@ class EntityId(ValueObject):
     def __str__(self) -> str:
         return self._id
 
+    def __hash__(self):
+        return hash(self._id)
+
 
 class Entity(ABC):
     def __init__(self, id: EntityId = None):
