@@ -96,3 +96,40 @@ class Specification(ABC):
     @abstractmethod
     def is_satisfied_by(self, obj: object) -> bool:
         pass
+
+    def __and__(self, other: object) -> 'AndSpecification':
+        return AndSpecification(self, other)
+
+    def __or__(self, other: object) -> 'OrSpecification':
+        return OrSpecification(self, other)
+
+    def __invert__(self) -> 'NotSpecification':
+        return NotSpecification(self)
+
+
+class AndSpecification(Specification):
+    def __init__(self, spec1: Specification, spec2: Specification):
+        self._spec1 = spec1
+        self._spec2 = spec2
+
+    def is_satisfied_by(self, obj: object) -> bool:
+        return self._spec1.is_satisfied_by(obj) and \
+            self._spec2.is_satisfied_by(obj)
+
+
+class OrSpecification(Specification):
+    def __init__(self, spec1: Specification, spec2: Specification):
+        self._spec1 = spec1
+        self._spec2 = spec2
+
+    def is_satisfied_by(self, obj: object) -> bool:
+        return self._spec1.is_satisfied_by(obj) or \
+            self._spec2.is_satisfied_by(obj)
+
+
+class NotSpecification(Specification):
+    def __init__(self, spec: Specification):
+        self._spec = spec
+
+    def is_satisfied_by(self, obj: object) -> bool:
+        return not self._spec.is_satisfied_by(obj)

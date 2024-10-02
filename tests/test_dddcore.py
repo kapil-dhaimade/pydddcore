@@ -11,7 +11,11 @@ from pydddcore import (
     DomainException,
     DomainEventPublisher,
     DomainEventSubscriber,
-    AggregateRoot
+    AggregateRoot,
+    Specification,
+    OrSpecification,
+    AndSpecification,
+    NotSpecification,
 )
 
 
@@ -108,6 +112,8 @@ def test_value_object_equality():
     # Different instances with different values should not be equal
     assert value1 != value4
 
+    assert (value4 == None) is False
+
 
 def test_ddd_abstract_classes():
     with pytest.raises(TypeError):
@@ -171,3 +177,103 @@ def test_domain_exception():
 def test_domain_exception_is_an_exception():
     with pytest.raises(Exception):
         raise DomainException("Test exception")
+
+
+def test_base_specification_is_abstract():
+    with pytest.raises(TypeError):
+        Specification()
+
+
+def test_dummy_specification():
+    class DummySpec(Specification):
+        def __init__(self, dummy_val: int):
+            self._dummy_val = dummy_val
+
+        def is_satisfied_by(self, candidate):
+            return True
+    spec = DummySpec(2)
+    assert spec.is_satisfied_by(None) is True
+
+
+class TrueSpec(Specification):
+        def is_satisfied_by(self, candidate):
+            return True
+
+
+class FalseSpec(Specification):
+    def is_satisfied_by(self, candidate):
+        return False
+
+
+def test_or_specification():
+    true_spec = TrueSpec()
+    false_spec = FalseSpec()
+
+    or_spec = OrSpecification(true_spec, true_spec)
+    assert or_spec.is_satisfied_by(None) is True
+
+    or_spec = true_spec | true_spec
+    assert or_spec.is_satisfied_by(None) is True
+
+    or_spec = false_spec | false_spec
+    assert or_spec.is_satisfied_by(None) is False
+
+    or_spec = false_spec | true_spec
+    assert or_spec.is_satisfied_by(None) is True
+
+    or_spec = true_spec | false_spec
+    assert or_spec.is_satisfied_by(None) is True
+
+
+def test_and_specification():
+    true_spec = TrueSpec()
+    false_spec = FalseSpec()
+
+    and_spec = AndSpecification(true_spec, true_spec)
+    assert and_spec.is_satisfied_by(None) is True
+
+    and_spec = true_spec & true_spec
+    assert and_spec.is_satisfied_by(None) is True
+
+    and_spec = false_spec & false_spec
+    assert and_spec.is_satisfied_by(None) is False
+
+    and_spec = false_spec & true_spec
+    assert and_spec.is_satisfied_by(None) is False
+
+    and_spec = true_spec & false_spec
+    assert and_spec.is_satisfied_by(None) is False
+
+
+def test_not_specification():
+    true_spec = TrueSpec()
+    false_spec = FalseSpec()
+
+    not_spec = NotSpecification(true_spec)
+    assert not_spec.is_satisfied_by(None) is False
+
+    not_spec = ~true_spec
+    assert not_spec.is_satisfied_by(None) is False
+
+    not_spec = ~false_spec
+    assert not_spec.is_satisfied_by(None) is True
+
+
+def test_composite_specification():
+    true_spec = TrueSpec()
+    false_spec = FalseSpec()
+
+    composite_spec = (true_spec & true_spec) | (false_spec & false_spec)
+    assert composite_spec.is_satisfied_by(None) is True
+
+    composite_spec = (~(false_spec & false_spec)) | (false_spec & true_spec)
+    assert composite_spec.is_satisfied_by(None) is True
+
+    composite_spec = (false_spec & false_spec) | (false_spec & true_spec)
+    assert composite_spec.is_satisfied_by(None) is False
+
+    composite_spec = (false_spec & false_spec) | (true_spec & true_spec)
+    assert composite_spec.is_satisfied_by(None) is True
+
+    composite_spec = (false_spec | false_spec) & (true_spec | false_spec)
+    assert composite_spec.is_satisfied_by(None) is False
