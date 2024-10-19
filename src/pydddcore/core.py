@@ -76,7 +76,7 @@ class DomainEventPublisher(ABC):
 
 class DomainEventSubscriber(ABC):
     @abstractmethod
-    async def handleEvent(self, event: DomainEvent):
+    async def handle_event(self, event: DomainEvent):
         pass
 
 
