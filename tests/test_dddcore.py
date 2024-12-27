@@ -112,7 +112,7 @@ def test_value_object_equality():
     # Different instances with different values should not be equal
     assert value1 != value4
 
-    assert (value4 == None) is False
+    assert (value4 is None) is False
 
 
 def test_ddd_abstract_classes():
@@ -196,8 +196,8 @@ def test_dummy_specification():
 
 
 class TrueSpec(Specification):
-        def is_satisfied_by(self, candidate):
-            return True
+    def is_satisfied_by(self, candidate):
+        return True
 
 
 class FalseSpec(Specification):
